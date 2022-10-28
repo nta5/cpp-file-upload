@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 
-main() {
+int main() {
   int sock;
   struct sockaddr_in server;
   int msgsock;
@@ -40,4 +40,6 @@ main() {
 	printf("%s\n",buf);
   }
   close (sock);
+
+  return 0;
 }

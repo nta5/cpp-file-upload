@@ -1,7 +1,8 @@
 #include "Socket.h"
 #include "ServerSocket.h"
 #include <stddef.h>
-main() {
+
+int main() {
   ServerSocket *ss = new ServerSocket(8888);
 	if (ss != NULL) {
 		Socket *cs = ss->Accept();
@@ -9,4 +10,6 @@ main() {
 		char *res = new char(50);
 		cs->sendResponse(res);
 	}
+
+    return 0;
 }

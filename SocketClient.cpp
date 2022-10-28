@@ -7,6 +7,8 @@
 #include <iostream>
 #include <string.h>
 
+using namespace std;
+
 int main() {
   int sock;
   struct sockaddr_in server;

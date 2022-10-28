@@ -3,15 +3,17 @@
 #include <sys/types.h>
 #include <resolv.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <iostream>
 
-
+using namespace std;
 
 ServerSocket::ServerSocket(int port)
 {
   sock = socket (AF_INET, SOCK_STREAM, 0);
   if (sock < 0) {
     perror("opening stream socket");
+  } else {
+    cout << "opening stream socket" << endl;
   }
   struct sockaddr_in server;
   server.sin_family = AF_INET;
@@ -20,9 +22,10 @@ ServerSocket::ServerSocket(int port)
   
   if (bind (sock, (struct sockaddr *)&server, sizeof server) < 0) {
     perror ("binding stream socket");
+  } else {
+    cout << "binding stream socket" << endl;
   }
-  listen (sock, 5);
-
+  listen(sock, 5);
 }
 
 Socket* ServerSocket::Accept()

@@ -4,10 +4,13 @@
 #include <unistd.h>
 #include <netinet/in.h>
 #include <netdb.h>
-#include <stdio.h>
+#include <iostream>
 #include <string.h>
 
-main() {
+
+using namespace std;
+
+int main() {
   int sock;
   struct sockaddr_in server;
   int msgsock;
@@ -19,6 +22,8 @@ main() {
   sock = socket (AF_INET, SOCK_STREAM, 0);
   if (sock < 0) {
     perror("opening stream socket");
+  } else {
+    cout << "opening stream socket" << endl;
   }
 
   bzero(&server, sizeof(server));
@@ -29,15 +34,21 @@ main() {
   
   if (connect(sock, (struct sockaddr*)&server, sizeof(server))<0){
     perror("connecting");
+  } else {
+    cout << "connecting" << endl;
   }
 
+  // console app write request
   strcpy(buf,"hello");
   if ((rval = write(sock, buf, 1024)) < 0){
     perror("writing socket");
+  } else {
+    cout << buf << endl;
   }
   
-  while ((rval = read(sock, buf, 1024)) > 0){
-	printf("%s\n",buf);
+  // read response
+  if ((rval = read(sock, buf, 1024)) > 0){
+    printf("%s\n",buf);
   }
   close (sock);
 }

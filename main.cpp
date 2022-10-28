@@ -11,4 +11,6 @@ int main() {
 			cs->sendResponse(res);
 		}
 	}
+
+    return 0;
 }

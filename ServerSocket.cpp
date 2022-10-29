@@ -18,13 +18,16 @@ ServerSocket::ServerSocket(int port)
   struct sockaddr_in server;
   server.sin_family = AF_INET;
   server.sin_addr.s_addr = INADDR_ANY;
-  server.sin_port = 8888;
+  server.sin_port = htons(8888);
   
-  if (bind (sock, (struct sockaddr *)&server, sizeof server) < 0) {
+  if (bind(sock, (struct sockaddr *)&server, sizeof server) < 0) {
     perror ("binding stream socket");
   } else {
     cout << "binding stream socket" << endl;
   }
+  getsockname( sock, (struct sockaddr *) &server,(socklen_t *)sizeof server);
+  printf("opened socket as fd (%d) on port (%d) for stream i/o\n",sock, ntohs(server.sin_port));
+
   listen(sock, 5);
 }
 

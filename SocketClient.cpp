@@ -29,7 +29,7 @@ int main() {
   hp = gethostbyname("localhost");
   bcopy((char*)hp->h_addr, (char*)&server.sin_addr, hp->h_length);
   server.sin_family = AF_INET;
-  server.sin_port = 8888;
+  server.sin_port = htons(8888);
   
   if (connect(sock, (struct sockaddr*)&server, sizeof(server))<0){
     perror("connecting");

@@ -39,6 +39,7 @@ Socket* ServerSocket::Accept()
 	Socket *cs = new Socket(cSock);
 	return cs;
 }
+
 ServerSocket::~ServerSocket()
 {
 }

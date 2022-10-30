@@ -3,15 +3,15 @@
 #include <stddef.h>
 
 int main() {
-	ServerSocket *ss = new ServerSocket(8888);
-	if (ss != NULL) {
-		while (true) {
-			Socket *cs = ss->Accept();
-			char *req = cs->getRequest();
-			char *res = new char();
-			cs->sendResponse(res);
-		}
-	}
+    ServerSocket *ss = new ServerSocket(8888);
+    if (ss != NULL) {
+        while (true) {
+            Socket *cs = ss->Accept();
+            char *req = cs->getRequest();
+            char *res = new char();
+            cs->sendResponse(res);
+        }
+    }
 
     return 0;
 }

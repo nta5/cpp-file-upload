@@ -1,6 +1,7 @@
 #include "SimpleThread.h"
 #include <unistd.h>
 #include <stdio.h>
+
 SimpleThread::SimpleThread(char* name):Thread(this) {
    this->_name = name;
 }

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <sstream>
 #include <iostream>
+#include <limits>
 #include "WebUploadServlet.hpp"
 
 using namespace std;

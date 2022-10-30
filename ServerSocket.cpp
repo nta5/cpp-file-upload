@@ -1,6 +1,7 @@
 #include "ServerSocket.h"
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <netinet/tcp.h>
 #include <resolv.h>
 #include <unistd.h>
 #include <iostream>
@@ -17,10 +18,14 @@ ServerSocket::ServerSocket(int port)
   }
   struct sockaddr_in server;
   server.sin_family = AF_INET;
-  server.sin_addr.s_addr = INADDR_ANY;
+  server.sin_addr.s_addr = htonl(INADDR_ANY);
   server.sin_port = htons(8888);
-  
-  if (bind(sock, (struct sockaddr *)&server, sizeof server) < 0) {
+
+  int option;
+  getsockopt(sock, IPPROTO_TCP, TCP_NODELAY, &option, reinterpret_cast<socklen_t *>(sizeof(option)));
+  setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+
+  if (bind(sock, (struct sockaddr *)&server, sizeof(server)) < 0) {
     perror ("binding stream socket");
   } else {
     cout << "binding stream socket" << endl;

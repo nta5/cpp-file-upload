@@ -39,7 +39,7 @@ ServerSocket::ServerSocket(int port)
 Socket* ServerSocket::Accept()
 {
 	sockaddr_in localAddr, remoteAddr;
-	unsigned int addrLen = sizeof (remoteAddr);
+	socklen_t addrLen = sizeof (remoteAddr);
 	int cSock = accept(sock, (struct sockaddr *)&remoteAddr, &addrLen);
 	Socket *cs = new Socket(cSock);
 	return cs;

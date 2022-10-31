@@ -15,7 +15,7 @@ int main() {
   int msgsock;
   char buf[1024];
   struct hostent *hp;
-  char *host = "127.0.0.1";
+  const char *host = "127.0.0.1";
   int rval;
 
   sock = socket (AF_INET, SOCK_STREAM, 0);

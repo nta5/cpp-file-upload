@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <cstring>
 #include "MyUtil.hpp"
 
 using namespace std;

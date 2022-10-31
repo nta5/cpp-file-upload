@@ -7,23 +7,44 @@ Socket::Socket(int sock)
 }
 char* Socket::getRequest()
 {
+    const int HEADER_SIZE = 874;
     int rval;
-    char *res = new char[1024];
+    char *header = new char[HEADER_SIZE];
     WebUploadServlet http_servlet;
 
     //TODO: change to while to read through the end
-    if ((rval = read(sock, res, 1024)) < 0){
-        perror("reading socket");
+    if ((rval = read(sock, header, HEADER_SIZE)) < 0){
+        perror("reading socket (header)");
     }else  {
-        ServletRequest req(res);
+        ServletRequest req(header);
         ServletResponse res;
         printf("get request\n\n");
 
-        if(req.getMethod() == "POST") http_servlet.doPost(sock, req, res);
-        else if(req.getMethod() == "GET") http_servlet.doGet(sock, req, res);
-        else printf("what is this"); //for command line?
+        if(req.getMethod() == "POST"){
+            const int BODY_SIZE = req.getContentLength();
+            char *body = new char[BODY_SIZE];
+            cout << "body size: " << BODY_SIZE << endl;
+            if((rval = read(sock, body, BODY_SIZE)) < 0){
+                perror("reading socket (body)");
+            }else{
+                req.setBody(body);
+                req.parseFilePart();
+            }
+//            for(int i = 0; i < BODY_SIZE; ++i){
+//                cout << body[i];
+//            }
+//            cout << endl;
+//            cout << "length: " << strlen(body) << endl;
 
-//        printf("%s\n", buf);
+
+            http_servlet.doPost(sock, req, res);
+        }
+        else if(req.getMethod() == "GET"){
+            http_servlet.doGet(sock, req, res);
+        }
+        else{
+            printf("what is this"); //for command line?
+        }
     }
 
 

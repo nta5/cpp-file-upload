@@ -10,15 +10,23 @@
 using namespace std;
 
 class ServletRequest{
+    //4 - the number of lines before the actual file bytes start
     const int BEFORE_FILE;
+
+    //parsed file bytes
+    unsigned char* mFile;
+
+    //data read from socket
     char* mHeader;
     char* mBody;
-    unsigned char* mFile;
     vector<char*> mHeaderByLine;
     vector<char*> mBodyByLine;
-    vector<char*> mBodyCharPtr;
+
+    //info from header
     string mMethod;
     int mContentLength;
+
+    //info from body
     string mFileName;
     string mCaption;
     string mDate;

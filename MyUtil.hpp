@@ -7,4 +7,5 @@ using namespace std;
 class MyUtil{
 public:
     static string myTrim(string str);
+    static string leftNewLineTrim(string str);
 };

@@ -10,6 +10,7 @@
 using namespace std;
 
 class ServletRequest{
+    const int BEFORE_FILE;
     char* mHeader;
     char* mBody;
     unsigned char* mFile;
@@ -21,9 +22,15 @@ class ServletRequest{
     string mFileName;
     string mCaption;
     string mDate;
+    int mFileSize;
 
     vector<char*> separateLine(char* res);
     void parseHeader();
+    bool findString(char *str, string cmp);
+    vector<int> getLinePos(int range, char *res);
+    void parseFileName();
+    int parseFileInfo();
+    void createFileBytes(int end);
 public:
     ServletRequest(char *header);
     void parseFilePart();

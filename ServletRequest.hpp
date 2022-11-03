@@ -30,7 +30,7 @@ class ServletRequest{
     string mFileName;
     string mCaption;
     string mDate;
-    int mFileSize;
+    size_t mFileSize;
 
     vector<char*> separateLine(char* res);
     void parseHeader();
@@ -48,5 +48,6 @@ public:
     string getFileName() { return mFileName; }
     string getCaption() { return mCaption; }
     string getDate() { return mDate; }
+    size_t getFileSize() { return mFileSize; }
     unsigned char* getFileByte() { return mFile; }
 };

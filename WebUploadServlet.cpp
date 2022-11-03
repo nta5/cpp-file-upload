@@ -1,4 +1,5 @@
 #include "WebUploadServlet.hpp"
+#include <fstream>
 
 void WebUploadServlet::doGet(int sock, ServletRequest request, ServletResponse response) {
     int rval;
@@ -17,6 +18,12 @@ void WebUploadServlet::doGet(int sock, ServletRequest request, ServletResponse r
 }
 
 void WebUploadServlet::doPost(int sock, ServletRequest request, ServletResponse response) {
+    ofstream fout;
+    fout.open("images/" + request.getFileName(), ios::binary | ios::out);
+    unsigned char *a = request.getFileByte();
+    fout.write((char*) &a, sizeof(a));
+    fout.close();
+
     int rval;
     string resString = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE html>\r\n<html>\n   <head>\n       <title>File Upload Form</title>\n   </head>\n   <body>\n       <h3>File Uploaded: "
             + request.getFileName() + ", " + request.getCaption() + ", " + request.getDate() + "</h3>\n </body>\n</html>\r\n\r\n";

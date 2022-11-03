@@ -48,4 +48,5 @@ public:
     string getFileName() { return mFileName; }
     string getCaption() { return mCaption; }
     string getDate() { return mDate; }
+    unsigned char* getFileByte() { return mFile; }
 };

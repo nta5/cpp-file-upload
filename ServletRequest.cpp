@@ -98,12 +98,19 @@ int ServletRequest::parseFileInfo() {
         ++lineNum;
     }
     mCaption = MyUtil::leftNewLineTrim(mBodyByLine.at(lineNum - 1));
+    if(mCaption == ""){
+        int pos = mFileName.find(".");
+        mCaption = mFileName.substr(0, pos);
+    }
 
     ++lineNum;
     while (lineNum < mBodyByLine.size() && !findString(mBodyByLine.at(lineNum), BOUNDARY)) {
         ++lineNum;
     }
-    mDate = MyUtil::leftNewLineTrim(mBodyByLine.at(lineNum - 1));
+
+    mDate = MyUtil::leftNewLineTrim(mBodyByLine.at(lineNum - 1)) == "" ?
+            currentDateTime() :
+            MyUtil::leftNewLineTrim(mBodyByLine.at(lineNum - 1));
 
     return endFile;
 }
@@ -165,4 +172,16 @@ vector<int> ServletRequest::getLinePos(int range, char* res) {
     }
 
     return linePos;
+}
+
+const string ServletRequest::currentDateTime() {
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+    // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
+    // for more information about date/time format
+    strftime(buf, sizeof(buf), "%Y-%m-%d", &tstruct);
+
+    return buf;
 }

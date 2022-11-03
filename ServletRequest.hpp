@@ -5,9 +5,11 @@
 #include <sstream>
 #include <iostream>
 #include <cstring>
+#include <time.h>
 #include "MyUtil.hpp"
 
 using namespace std;
+using namespace std::chrono;
 
 class ServletRequest{
     //4 - the number of lines before the actual file bytes start
@@ -42,6 +44,7 @@ class ServletRequest{
 public:
     ServletRequest(char *header);
     void parseFilePart();
+    const string currentDateTime();
     string getMethod() { return mMethod; }
     int getContentLength() { return mContentLength; }
     void setBody(char* body) { mBody = body; }
@@ -50,4 +53,5 @@ public:
     string getDate() { return mDate; }
     size_t getFileSize() { return mFileSize; }
     unsigned char* getFileByte() { return mFile; }
+
 };

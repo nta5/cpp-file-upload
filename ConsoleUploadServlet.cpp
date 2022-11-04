@@ -26,7 +26,7 @@ using namespace std;
 int main()
 {
     struct sockaddr_in addr;
-    int addrlen, sock, status;
+    unsigned int addrlen, sock, status;
     struct ip_mreq mreq;
     char buf[50];
     static int so_reuseaddr = TRUE;
@@ -104,6 +104,6 @@ int main()
 
     }
 
-    cout << R"({"path": ")" << myList[0] << R"(", "caption": ")" << myList[1] << R"(", "date": )" << myList[2] << "}";
+    cout << "{\"path\": " << myList[0] << ", \"caption\": " << myList[1] << ", \"date\": " << myList[2] << "}";
 }
 

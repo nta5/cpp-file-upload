@@ -2,36 +2,22 @@
 // Created by Li on 2022-11-02.
 //
 
-//#include "ConsoleUploadServlet.hpp"
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <time.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <strings.h>
-#include <stdio.h>
-#include <string.h>
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
+#include "ConsoleUploadServlet.hpp"
+
 
 #define TRUE 1
 
 using namespace std;
 
-//void ConsoleUploadServlet::doGet()
-int main()
+void ConsoleUploadServlet::console()
 {
     struct sockaddr_in addr;
-    unsigned int addrlen, sock, status;
+    int addrlen, sock, status;
     struct ip_mreq mreq;
     char buf[50];
     static int so_reuseaddr = TRUE;
     bool loop = true;
-    string myList[3];
+    std::string myList[3];
 
     /* set up socket */
     sock = socket(AF_INET, SOCK_DGRAM, 0);
@@ -72,17 +58,18 @@ int main()
     }
 
     /*receive messages destined for this multicast group*/
-    status = recvfrom(sock, buf, sizeof(buf), 0,
-                      (struct sockaddr *) &addr, &addrlen);
-    if (status < 0) {
-        perror("recvfrom");
-        exit(1);
-    }
-    if (strcmp(buf, "n") == 0) {
-        loop = false;
-    } else {
-        loop = true;
-    }
+//    status = recvfrom(sock, buf, sizeof(buf), 0,
+//                      (struct sockaddr *) &addr, &addrlen);
+//    if (status < 0) {
+//        perror("recvfrom");
+//        exit(1);
+//    }
+//    printf("%s: message = \"%s\"\n", inet_ntoa(addr.sin_addr), buf);
+//    if (strcmp(buf, "n") == 0) {
+//        loop = false;
+//    } else {
+//        loop = true;
+//    }
 
     int count = 0;
     char newBuf[1024];
@@ -99,11 +86,18 @@ int main()
 
         myList[count] = newBuf;
         count++;
-
-//        printf("%s: message = \"%s\"\n", inet_ntoa(addr.sin_addr), newBuf);
+        if (count == 3) {
+            printf("{\"path\": %s, \"caption\": %s, \"date\": %s}", myList[0].c_str(), myList[1].c_str(), myList[2].c_str());
+        }
+//        printf("{\"path\": %s, \"caption\": %s, \"date\": %s}", myList[0].c_str(), myList[1].c_str(), myList[2].c_str());
+        printf("%s: m1111essage = \"%s\"\n", inet_ntoa(addr.sin_addr), newBuf);
+//        printf("");
 
     }
 
-    cout << "{\"path\": " << myList[0] << ", \"caption\": " << myList[1] << ", \"date\": " << myList[2] << "}";
+//    cout << "{\"path\": " << myList[0] << ", \"caption\": " << myList[1] << ", \"date\": " << myList[2] << "}";
+    return;
+
 }
+
 

@@ -5,6 +5,7 @@
 #include <resolv.h>
 #include <unistd.h>
 #include <iostream>
+#include "ConsoleUploadServlet.hpp"
 
 using namespace std;
 
@@ -32,6 +33,7 @@ ServerSocket::ServerSocket(int port)
   }
   getsockname( sock, (struct sockaddr *) &server,(socklen_t *)sizeof server);
   printf("opened socket as fd (%d) on port (%d) for stream i/o\n",sock, ntohs(server.sin_port));
+  ConsoleUploadServlet::console();
 
   listen(sock, 5);
 }

@@ -58,23 +58,23 @@ int main()
             exit(1);
         }
 
-        cout << "Confirm the path" << endl;
-        char confirmPath[1024];
-        cin >> confirmPath;
-        strcpy(path2, confirmPath);
-        if (strcmp(path, path2) != 0) {
-            cout << "Please enter same path!" << endl;
-            char stop[500]  = "nonono";
-            sendto(sock, stop, sizeof(stop), 0,(struct sockaddr *) &addr, addrlen);
-            exit(1);
-        }
-
-        status = sendto(sock, path2, sizeof(path2), 0,
-                        (struct sockaddr *) &addr, addrlen);
-        if (status < 0) {
-            perror("sendto");
-            exit(1);
-        }
+//        cout << "Confirm the path" << endl;
+//        char confirmPath[1024];
+//        cin >> confirmPath;
+//        strcpy(path2, confirmPath);
+//        if (strcmp(path, path2) != 0) {
+//            cout << "Please enter same path!" << endl;
+//            char stop[500]  = "nonono";
+//            sendto(sock, stop, sizeof(stop), 0,(struct sockaddr *) &addr, addrlen);
+//            exit(1);
+//        }
+//
+//        status = sendto(sock, path2, sizeof(path2), 0,
+//                        (struct sockaddr *) &addr, addrlen);
+//        if (status < 0) {
+//            perror("sendto");
+//            exit(1);
+//        }
 
         cout << "Enter the caption" << endl;
         char x[1024];

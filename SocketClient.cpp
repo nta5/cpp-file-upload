@@ -37,13 +37,6 @@ int main()
     addr.sin_port = htons(8888);
     addrlen = sizeof(addr);
 
-//    if (inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr)
-//        <= 0) {
-//        printf(
-//                "\nInvalid address/ Address not supported \n");
-//        return -1;
-//    }
-
     if ((client_fd = connect(sock, (struct sockaddr*)&addr,
                            sizeof(addr)))
         < 0) {
@@ -82,75 +75,5 @@ int main()
     }else  {
         cout << "pass";
     }
-//
-//    char buffer[1024] = { 0 };
-//    int valread = read(sock, buffer, 1024);
-//    printf("%s\n", buffer);
-
-//    while (loop) {
-//        cout << "Enter the path" << endl;
-//        char path1[1024];
-//        cin >> path1;
-//        strcpy(path, path1);
-//        status = sendto(sock, path, sizeof(path), 0,
-//                        (struct sockaddr *) &addr, addrlen);
-//        if (status < 0) {
-//            perror("sendto");
-//            exit(1);
-//        }
-//
-//        cout << "Confirm the path" << endl;
-//        char confirmPath[1024];
-//        cin >> confirmPath;
-//        strcpy(path2, confirmPath);
-//        if (strcmp(path, path2) != 0) {
-//            cout << "Please enter same path!" << endl;
-//            char stop[500]  = "nonono";
-//            sendto(sock, stop, sizeof(stop), 0,(struct sockaddr *) &addr, addrlen);
-//            exit(1);
-//        }
-//
-//        status = sendto(sock, path2, sizeof(path2), 0,
-//                        (struct sockaddr *) &addr, addrlen);
-//        if (status < 0) {
-//            perror("sendto");
-//            exit(1);
-//        }
-//
-//        cout << "Enter the caption" << endl;
-//        char x[1024];
-//        cin >> x;
-//        strcpy(caption, x);
-//        status = sendto(sock, caption, sizeof(caption), 0,
-//                        (struct sockaddr *) &addr, addrlen);
-//        if (status < 0) {
-//            perror("sendto");
-//            exit(1);
-//        }
-//
-//        cout << "Enter the date" << endl;
-//        char y[1024];
-//        cin >> y;
-//        strcpy(date, y);
-//        status = sendto(sock, date, sizeof(date), 0,
-//                        (struct sockaddr *) &addr, addrlen);
-//        if (status < 0) {
-//            perror("sendto");
-//            exit(1);
-//        }
-//
-//        cout << "Successful upload a image." << endl;
-//
-//
-//        cout << path << " " << caption << " " << date;
-//        loop = false;
-//        cout << "Do you want to upload another image?(y/n)" << endl;
-//        char a[1024];
-//        cin >> a;
-//        if (strcmp(a, "y") != 0) {
-//            loop = false;
-//        }
-//
-//    }
 
 }

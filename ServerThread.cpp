@@ -4,9 +4,13 @@
 
 #include "ServerThread.h"
 
-void ServerThread::run() {
+ServerThread::ServerThread(Socket *socket, int connectionCount) {
+    this->socket = socket;
+    this->connectionCount = connectionCount;
+}
 
-    char *req = cs->getRequest();
+void ServerThread::run() {
+    char *req = socket->getRequest();
     char *res = new char();
 //            cs->sendResponse(mRes);
 }

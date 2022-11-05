@@ -19,11 +19,15 @@ Thread::Thread(Thread *childThread) {
 }
 
 void Thread::start() {
-        pthread_t tid;
+    pthread_t tid;
 	pthread_create(&tid, NULL, startMethodInThread, (void *) this);
 	memcpy(this->state, (const void *)&tid, sizeof(pthread_t));
 }
 
 Thread::~Thread() {
 	free(this->state);
+}
+
+Thread::Thread() {
+    this->state = malloc(sizeof(pthread_t));
 }

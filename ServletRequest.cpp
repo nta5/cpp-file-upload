@@ -15,6 +15,8 @@ void ServletRequest::parseHeader() {
     if(mMethod == "POST"){
         string content = mHeaderByLine.at(CONTENT_POS);
         string length = MyUtil::myTrim(content.substr(content.find(':') + 1, content.length()));
+//        cout << "POST: " << length << endl;
+//        mContentLength = 45200;
         mContentLength = stoi(length);
     }
 }

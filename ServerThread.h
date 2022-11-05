@@ -11,12 +11,12 @@
 
 class ServerThread: public Thread {
 private:
-    Socket socket;
+    Socket *socket;
     int connectionCount;
 public:
-    ServerThread(Thread *childThread, Socket socket, int connectionCount) : Thread(childThread), socket(socket),
-                                                                            connectionCount(connectionCount) {};
+    ServerThread(Socket *socket, int connectionCount);
     void run() override;
+//    void start() override;
 };
 
 

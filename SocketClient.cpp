@@ -25,7 +25,7 @@ int main()
     time_t t;
 
     /* set up socket */
-    sock = socket(AF_INET, SOCK_DGRAM, 0);
+    sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
         perror("socket");
         exit(1);

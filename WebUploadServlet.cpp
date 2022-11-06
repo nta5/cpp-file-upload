@@ -1,5 +1,10 @@
 #include "WebUploadServlet.hpp"
 #include <fstream>
+#include <filesystem>
+#include <vector>
+#include <string>
+
+using std::filesystem::recursive_directory_iterator;
 
 void WebUploadServlet::doGet(int sock, ServletRequest request, ServletResponse response) {
     int rval;
@@ -20,14 +25,23 @@ void WebUploadServlet::doGet(int sock, ServletRequest request, ServletResponse r
 void WebUploadServlet::doPost(int sock, ServletRequest request, ServletResponse response) {
     int rval;
     string resString = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE html>\r\n<html>\n   <head>\n       <title>File Upload Form</title>\n   </head>\n   <body>\n       <h3>File Uploaded: "
-            + request.getFileName() + ", " + request.getCaption() + ", " + request.getDate() + "</h3>\n </body>\n</html>\r\n\r\n";
+            + request.getFileName() + ", " + request.getCaption() + ", " + request.getDate() + "</h3>\n <h4>Server Files:</h4>\n" ;
 
     ofstream fout;
-    fout.open("images/" + request.getFileName(), ios::binary | ios::out);
+    fout.open("images/" +request.getDate()+"_"+request.getCaption()+"_"+request.getFileName(), ios::binary | ios::out);
     unsigned char *image = request.getFileByte();
 
     fout.write((char *)&image[0], request.getFileSize());
     fout.close();
+
+    string path = "./images/";
+
+    for (const auto & file : recursive_directory_iterator(path)) {
+        string str(file.path().filename());
+        resString += "<h4>" + str + "</h4>\n";
+    }
+
+    resString += "</body>\n</html>\r\n\r\n";
 
     char res[resString.length() + 1];
     strcpy(res, resString.c_str());

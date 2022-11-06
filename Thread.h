@@ -3,10 +3,12 @@
 class Thread {
 public:
 	Thread(Thread *childThread);
-	~Thread();
-	void run() {}
-	void start();
-private:
-	void *state;
-	Thread *childThread;
+    Thread();
+    ~Thread();
+    virtual void run() {};
+    void start();
+    Thread *childThread;
+//	Thread *childThread;
+protected:
+    void *state;
 };

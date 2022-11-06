@@ -12,7 +12,7 @@ using namespace std;
 void ConsoleUploadServlet::console()
 {
     struct sockaddr_in addr;
-    int addrlen, sock, status;
+    unsigned int addrlen, sock, status;
     struct ip_mreq mreq;
     char buf[50];
     static int so_reuseaddr = TRUE;

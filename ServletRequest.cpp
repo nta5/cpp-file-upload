@@ -1,31 +1,51 @@
 #include "ServletRequest.hpp"
 
-ServletRequest::ServletRequest(char *header) : mHeader(header), mContentLength(-1), BEFORE_FILE(4){
-    parseHeader();
+ServletRequest::ServletRequest(char *req, int request_length) : mReqeust(req), mContentLength(request_length), BEFORE_FILE(4){
+    parseRequest();
+}
+
+void ServletRequest::parseRequest() {
+    mRequestByLine = separateLine(mReqeust);
+    string method = mRequestByLine.at(0);
+    mMethod = MyUtil::myTrim(method.substr(0, method.find('/')));
+    cout << "mMethod:" << mMethod << endl;
+//    for(int i = 0; i < mContentLength; ++i){
+//        cout << mReqeust[i];
+//    }
+//    cout << endl;
+//    for(int i = 0; i < mRequestByLine.size(); ++i){
+//        cout << mRequestByLine.at(i);
+//    }
+//    cout << endl;
 }
 
 //parse info from header
-void ServletRequest::parseHeader() {
-    mHeaderByLine = separateLine(mHeader);
-    const int CONTENT_POS = 3;
-
-    string method = mHeaderByLine.at(0);
-    mMethod = MyUtil::myTrim(method.substr(0, method.find('/')));
-
-    if(mMethod == "POST"){
-        string content = mHeaderByLine.at(CONTENT_POS);
-        string length = MyUtil::myTrim(content.substr(content.find(':') + 1, content.length()));
-        mContentLength = stoi(length);
-    }
-}
+//void ServletRequest::parseHeader() {
+//    mHeaderByLine = separateLine(mHeader);
+//    const int CONTENT_POS = 3;
+//        for(int i = 0; i < mHeaderByLine.size(); ++i){
+//        cout << mHeaderByLine.at(i);
+//    }
+//    cout << endl;
+//
+//
+//    string method = mHeaderByLine.at(0);
+//    mMethod = MyUtil::myTrim(method.substr(0, method.find('/')));
+//
+//    if(mMethod == "POST"){
+//        string content = mHeaderByLine.at(CONTENT_POS);
+//        cout << content << endl;
+//        string length = MyUtil::myTrim(content.substr(content.find(':') + 1, content.length()));
+//        mContentLength = stoi(length);
+//    }
+//}
 
 //split original char array by '\n'
 vector<char*> ServletRequest::separateLine(char* res) {
     vector<char*> result;
-    int range = mContentLength == -1 ? strlen(res) : mContentLength;
 
     char* tmp = res;
-    vector<int> linePos = getLinePos(range, tmp);
+    vector<int> linePos = getLinePos(mContentLength, tmp);
 
     for(int i = 0; i < linePos.size() - 1; ++i){
         int beg = linePos[i];
@@ -45,6 +65,10 @@ vector<char*> ServletRequest::separateLine(char* res) {
 //parse file part
 void ServletRequest::parseFilePart() {
     mBodyByLine = separateLine(mBody);
+    for(int i = 0; i < mBodyByLine.size(); ++i){
+        cout << mBodyByLine.at(i);
+    }
+    cout << endl;
 
     //extract file name
     parseFileName();
@@ -138,28 +162,8 @@ void ServletRequest::createFileBytes(int end) {
 }
 
 bool ServletRequest::findString(char* str, string cmp){
-    char temp[cmp.length() + 1];
-    strcpy(temp, cmp.c_str());
-    int i=0;
-    int j=0;
-
-
-    while(str[i]!='\0'){
-        if(str[i] == temp[j])
-        {
-            while (str[i] == temp[j] && str[j]!='\0')
-            {
-                j++;
-                i++;
-            }
-            if(temp[j]=='\0'){
-                return true;
-            }
-            j=0;
-        }
-        i++;
-    }
-    return false;
+    string a(str);
+    return a.find(cmp) != string::npos;
 }
 
 vector<int> ServletRequest::getLinePos(int range, char* res) {

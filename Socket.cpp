@@ -7,54 +7,56 @@ Socket::Socket(int sock)
 }
 char* Socket::getRequest()
 {
-    const int HEADER_SIZE = 874;
-    int rval;
-    char *header = new char[HEADER_SIZE];
+    printf("in getRequest\n");
+    const int DATA_SIZE = 5000000;
+    const int BUFFER_SIZE = 1024;
+    const int GET_BOUNDARY_COUNT = 1;
+    const int POST_BOUNDARY_COUNT = 4;
+    ssize_t rval = 0;
     WebUploadServlet http_servlet;
 
-    if ((rval = read(sock, header, HEADER_SIZE)) < 0){
-        perror("reading socket (header)");
-    }else  {
-        ServletRequest req(header);
-        ServletResponse res;
+    char req_received[DATA_SIZE];
+    char buf[BUFFER_SIZE];
+    int req_pos = 0;
+    int buf_pos = 0;
+    while(true){
+        rval = read(sock, &buf[0], BUFFER_SIZE);
+//        printf("\nin while:%ld\n", rval);
 
-        if(req.getMethod() == "POST"){
-            const int BODY_SIZE = req.getContentLength();
-            char *body = new char[BODY_SIZE];
-
-            rval = read(sock, body, BODY_SIZE);
-            while(rval < BODY_SIZE && rval > 0){
-//                printf("READ ING ING ING, rval : %d\n", rval);
-                char* temp = new char[BODY_SIZE];
-                int size = read(sock, temp, BODY_SIZE);
-                int pos = 0;
-                for(int i = rval; i < rval + size; ++i){
-                    body[i] = temp[pos];
-                    ++pos;
-                }
-                rval += size;
-                delete[] temp;
-            }
-
-            if(rval < 0){
-                perror("reading socket (body)");
-            }else{
-//                printf("READ FROM SOCKET: %d\n", rval);
-                req.setBody(body);
-                req.parseFilePart();
-            }
-            http_servlet.doPost(sock, req, res);
+        for(int i = req_pos; i < req_pos + rval; ++i){
+            req_received[i] = buf[buf_pos];
+            ++buf_pos;
         }
-        else if(req.getMethod() == "GET"){
-            http_servlet.doGet(sock, req, res);
-        }
-        else{
-            printf("what is this"); //for command line?
+        req_pos += rval;
+
+        buf_pos = 0;
+        if(req_received[0] == 'G' && countBoundary("Accept-Language", req_received, req_pos) == GET_BOUNDARY_COUNT){
+            cout << endl;
+            printf("GET read completed\n");
+            break;
+        }else if(req_received[0] == 'P' && countBoundary("------WebKitFormBoundary", req_received, req_pos) == POST_BOUNDARY_COUNT){
+            printf("POST read completed\n");
+            break;
         }
     }
+    req_received[req_pos] = '\0';
+//    for(int i = 0; i < req_pos; i++){
+//        cout << req_received[i];
+//    }
 
+    if(rval < 0) perror("reading socket");
 
-    return nullptr;
+    ServletRequest req(req_received, req_pos);
+    ServletResponse res;
+
+    if(req.getMethod() == "POST"){
+        printf("doPost called\n");
+        http_servlet.doPost(sock, req, res);
+    }
+    else if(req.getMethod() == "GET") http_servlet.doGet(sock, req, res);
+    else perror("undetectable request");
+
+    return req_received;
 }
 
 void Socket::sendResponse(char *res){
@@ -73,4 +75,29 @@ void Socket::sendResponse(char *res){
 
 Socket::~Socket()
 {
+}
+
+int Socket::countBoundary(string boundary, char *req, ssize_t size) {
+    char* temp = req;
+    char* ptr = &boundary.at(0);
+    int count = 0;
+    int move_count = 0;
+    int pos = 0;
+
+    while(pos < size) {
+        while (move_count < boundary.length() && *temp == *ptr) {
+            *temp++;
+            *ptr++;
+            ++move_count;
+        }
+        if(move_count == boundary.length()) ++count;
+        move_count = 0;
+        ptr = &boundary.at(0);
+        *temp++;
+        ++pos;
+    }
+
+    cout << "count is: " << count << endl;
+
+    return count;
 }

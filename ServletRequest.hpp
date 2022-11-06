@@ -20,8 +20,10 @@ class ServletRequest{
     unsigned char* mFile;
 
     //data read from socket
+    char* mReqeust;
     char* mHeader;
     char* mBody;
+    vector<char*> mRequestByLine;
     vector<char*> mHeaderByLine;
     vector<char*> mBodyByLine;
 
@@ -36,6 +38,7 @@ class ServletRequest{
     size_t mFileSize;
 
     vector<char*> separateLine(char* res);
+    void parseRequest();
     void parseHeader();
     bool findString(char *str, string cmp);
     vector<int> getLinePos(int range, char *res);
@@ -43,7 +46,7 @@ class ServletRequest{
     int parseFileInfo();
     void createFileBytes(int end);
 public:
-    ServletRequest(char *header);
+    ServletRequest(char *req, int request_length);
     void parseFilePart();
     const string currentDateTime();
     string getMethod() { return mMethod; }

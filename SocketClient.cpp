@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
+#include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -44,28 +46,34 @@ int main()
         return -1;
     }
 
-    cout << client_fd;
+    ifstream ifd("C:\\Users\\redst\\Pictures\\Screenshot 2021-09-10 171216.png", ios::binary | ios::ate);
+    int size = ifd.tellg();
+    ifd.seekg(0, ios::beg);
+    vector<char> buffer;
+    buffer.resize(size); // << resize not reserve
+    ifd.read(buffer.data(), size);
+
+    //cout.write(buffer.data(), buffer.size());
+    string bytes(buffer.begin(),buffer.end());
 
     string payload = "";
-    payload += "\r\n----WebKitFormBoundary4ww5j9J1LNOFEB9f\r\n";
-    payload += "Content-Disposition: form-data; name=\"filename\"\r\n\r\n";
-    payload += "file.jpg\r\n";
-    payload += "----WebKitFormBoundary4ww5j9J1LNOFEB9f\r\n";
+    payload += "\r\n------WebKitFormBoundaryC0eh71BbS7kAj3Wn\r\n";
+    payload += "Content-Disposition: form-data; name=\"fileName\"; fileName=\"file.png\"\r\n";
+    payload += "Content-Type: image/png\r\n\r\n";
+    payload += bytes;
+    payload += "\r\n------WebKitFormBoundaryC0eh71BbS7kAj3Wn\r\n";
     payload += "Content-Disposition: form-data; name=\"caption\"\r\n\r\n";
     payload += "hi\r\n";
-    payload += "----WebKitFormBoundary4ww5j9J1LNOFEB9f\r\n";
+    payload += "------WebKitFormBoundaryC0eh71BbS7kAj3Wn\r\n";
     payload += "Content-Disposition: form-data; name=\"date\"\r\n\r\n";
     payload += "2022\r\n";
-    payload += "----WebKitFormBoundary4ww5j9J1LNOFEB9f--\r\n\r\n";
+    payload += "------WebKitFormBoundaryC0eh71BbS7kAj3Wn--\r\n\r\n";
 
     int rval;
-    string hdr = "";
-    hdr += "POST /upload HTTP/1.1\r\n";
-    hdr += "Host: localhost:8888\r\n";
-    hdr += "Connection: keep-alive\r\n";
-    hdr += "Content-Type: multipart/form-data; boundary=----WebKitFormBoundary4ww5j9J1LNOFEB9f\\r\\n";
-    hdr += "Content-Length:" + to_string(payload.size()) + "\r\n";
-    hdr += "\r\n";
+    string hdr = "POST /upload HTTP/1.1\r\nHost: localhost:8888\r\nConnection: keep-alive\r\nContent-Length: ";
+    hdr += to_string(payload.length());
+    hdr += "\r\nCache-Control: max-age=0\\r\\nsec-ch-ua: \"Google Chrome\";v=\"107\", \"Chromium\";v=\"107\", \"Not=A?Brand\";v=\"24\"\r\nsec-ch-ua-mobile: ?0\r\nsec-ch-ua-platform: \"Windows\"\r\nUpgrade-Insecure-Requests: 1\r\nOrigin: http://localhost:8888\r\nContent-Type: multipart/form-data; boundary=------WebKitFormBoundaryC0eh71BbS7kAj3Wn\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\"\r\nSec-Fetch-Site: same-origin\r\nSec-Fetch-Mode: navigate\r\nSec-Fetch-User: ?1\r\nSec-Fetch-Dest: document\r\nReferer: http://localhost:8888/\r\nAccept-Encoding: gzip, deflate, br\r\nAccept-Language: en-US,en;q=0.9\r\n";
+    cout << hdr.length() << endl;
     hdr += payload;
     char res[hdr.length() + 1];
     strcpy(res, hdr.c_str());
@@ -76,4 +84,9 @@ int main()
         cout << "pass";
     }
 
+//    char buffer[1024] = { 0 };
+//    rval = read(sock, buffer, 1024);
+//    printf("%s\n", buffer);
+
+    close(sock);
 }

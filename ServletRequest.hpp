@@ -20,12 +20,14 @@ class ServletRequest{
     unsigned char* mFile;
 
     //data read from socket
-    char* mReqeust;
+    char* mRequest;
     char* mHeader;
     char* mBody;
     vector<char*> mRequestByLine;
     vector<char*> mHeaderByLine;
     vector<char*> mBodyByLine;
+
+    int mRequestLength;
 
     //info from header
     string mMethod;

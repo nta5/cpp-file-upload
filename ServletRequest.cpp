@@ -1,22 +1,40 @@
 #include "ServletRequest.hpp"
 
-ServletRequest::ServletRequest(char *req, int request_length) : mReqeust(req), mContentLength(request_length), BEFORE_FILE(4){
+ServletRequest::ServletRequest(char *req, int request_length) : mRequest(req), mRequestLength(request_length),
+                                                                mContentLength(-1), BEFORE_FILE(4){
     parseRequest();
 }
 
 void ServletRequest::parseRequest() {
-    mRequestByLine = separateLine(mReqeust);
+//    for(int i = 0; i < mRequestLength; i++){
+//        cout << mBody[i];
+//    }
+    cout << endl;
+    mRequestByLine = separateLine(mRequest);
     string method = mRequestByLine.at(0);
     mMethod = MyUtil::myTrim(method.substr(0, method.find('/')));
     cout << "mMethod:" << mMethod << endl;
-//    for(int i = 0; i < mContentLength; ++i){
-//        cout << mReqeust[i];
-//    }
-//    cout << endl;
-//    for(int i = 0; i < mRequestByLine.size(); ++i){
-//        cout << mRequestByLine.at(i);
-//    }
-//    cout << endl;
+
+    if(mMethod == "POST"){
+        const string BOUNDARY = "------WebKitFormBoundary";
+        string strRequest = mRequest;
+        int pos = strRequest.find(BOUNDARY);
+        cout << "boundary beg part: " << pos << endl;
+        mHeader = new char[pos];
+        for(int i = 0; i < pos; i++){
+            mHeader[i] = mRequest[i];
+        }
+
+        mBody = new char[mRequestLength - pos];
+        int index = 0;
+        for(int i = pos; i < mRequestLength; i++){
+            mBody[index] = mRequest[i];
+            index++;
+        }
+
+        mContentLength = index;
+        parseFilePart();
+    }
 }
 
 //parse info from header
@@ -45,7 +63,7 @@ vector<char*> ServletRequest::separateLine(char* res) {
     vector<char*> result;
 
     char* tmp = res;
-    vector<int> linePos = getLinePos(mContentLength, tmp);
+    vector<int> linePos = getLinePos(mRequestLength, tmp);
 
     for(int i = 0; i < linePos.size() - 1; ++i){
         int beg = linePos[i];
@@ -65,10 +83,10 @@ vector<char*> ServletRequest::separateLine(char* res) {
 //parse file part
 void ServletRequest::parseFilePart() {
     mBodyByLine = separateLine(mBody);
-    for(int i = 0; i < mBodyByLine.size(); ++i){
-        cout << mBodyByLine.at(i);
-    }
-    cout << endl;
+//    for(int i = 0; i < mBodyByLine.size(); ++i){
+//        cout << mBodyByLine.at(i);
+//    }
+//    cout << endl;
 
     //extract file name
     parseFileName();

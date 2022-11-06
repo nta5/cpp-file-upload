@@ -32,10 +32,10 @@ char* Socket::getRequest()
         buf_pos = 0;
         if(req_received[0] == 'G' && countBoundary("Accept-Language", req_received, req_pos) == GET_BOUNDARY_COUNT){
             cout << endl;
-            printf("GET read completed\n");
+//            printf("GET read completed\n");
             break;
-        }else if(req_received[0] == 'P' && countBoundary("------WebKitFormBoundary", req_received, req_pos) == POST_BOUNDARY_COUNT){
-            printf("POST read completed\n");
+        }else if(req_received[0] == 'P' && countBoundary("------WebKitFormBoundary", req_received, req_pos) >= POST_BOUNDARY_COUNT){
+//            printf("POST read completed\n");
             break;
         }
     }
@@ -97,7 +97,7 @@ int Socket::countBoundary(string boundary, char *req, ssize_t size) {
         ++pos;
     }
 
-    cout << "count is: " << count << endl;
+//    cout << "count is: " << count << endl;
 
     return count;
 }

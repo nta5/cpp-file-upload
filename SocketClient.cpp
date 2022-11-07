@@ -34,7 +34,7 @@ int main()
     }
     bzero((char *)&addr, sizeof(addr));
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr("10.65.68.188");
+    addr.sin_addr.s_addr = inet_addr("172.20.10.5");
     /*addr.sin_addr.s_addr = htonl(INADDR_ANY);*/
     addr.sin_port = htons(8888);
     addrlen = sizeof(addr);
@@ -45,7 +45,7 @@ int main()
         printf("\nConnection Failed \n");
         return -1;
     }
-    cout << "Would you like to uplaod a image??(y/n)"<<endl;
+    cout << "Would you like to upload a image??(y/n)"<<endl;
     char checking[1024];
     cin >> checking;
 //    if(strcmp(checking,'y') == 0){
@@ -62,6 +62,7 @@ int main()
 //    char pathInput[1024];
     string pathInput;
     cin >> pathInput;
+    //parse the file name from the path and save into string
 
 
     cout << "Enter the caption" << endl;
@@ -87,10 +88,10 @@ int main()
     unsigned char bytesArray[fileSize];
     for(int i = 0; i < fileSize; i++){
         bytesArray[i] = buffer.at(i);
-        printf("%lx ", bytesArray[i]);
+//        printf("%lx ", bytesArray[i]);
 //        cout << bytesArray[i];
     }
-    printf("\n");
+//    printf("\n");
 //    cout << endl;
 
     //<--------------------- HEADER PART ----------------------------->
@@ -103,7 +104,7 @@ int main()
 
     //<--------------------- FILE PART ----------------------------->
     string filePart = "\r\n------WebKitFormBoundaryC0eh71BbS7kAj3Wn\r\n";
-    filePart += "Content-Disposition: form-data; name=\"fileName\"; filename=\"" +captionInput+"\r\n";
+    filePart += "Content-Disposition: form-data; name=\"fileName\"; filename=\"" +captionInput+".png\"\r\n";
     filePart += "Content-Type: image/png\r\n\r\n";
     int filePartSize = filePart.size();
     cout << "filePart size:" << filePartSize << endl;

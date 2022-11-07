@@ -15,7 +15,7 @@ char* Socket::getRequest()
     ssize_t rval = 0;
     WebUploadServlet http_servlet;
 
-    char req_received[DATA_SIZE];
+    char* req_received = new char[DATA_SIZE];
     char buf[BUFFER_SIZE];
     int req_pos = 0;
     int buf_pos = 0;

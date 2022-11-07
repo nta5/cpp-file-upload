@@ -27,11 +27,10 @@ class ServletRequest{
     vector<char*> mHeaderByLine;
     vector<char*> mBodyByLine;
 
-    int mRequestLength;
-
-    //info from header
     string mMethod;
+    int mRequestLength;
     int mContentLength;
+    string mHost;
 
     //info from body
     string mFileName;
@@ -41,7 +40,6 @@ class ServletRequest{
 
     vector<char*> separateLine(char* res);
     void parseRequest();
-    void parseHeader();
     bool findString(char *str, string cmp);
     vector<int> getLinePos(int range, char *res);
     void parseFileName();
@@ -53,6 +51,7 @@ public:
     const string currentDateTime();
     string getMethod() { return mMethod; }
     int getContentLength() { return mContentLength; }
+    string getHost() { return mHost; }
     void setBody(char* body) { mBody = body; }
     string getFileName() { return mFileName; }
     string getCaption() { return mCaption; }

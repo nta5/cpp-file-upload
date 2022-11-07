@@ -7,7 +7,7 @@ Socket::Socket(int sock)
 }
 char* Socket::getRequest()
 {
-    printf("in getRequest\n");
+//    printf("in getRequest\n");
     const int DATA_SIZE = 5000000;
     const int BUFFER_SIZE = 1024;
     const int GET_BOUNDARY_COUNT = 1;
@@ -50,7 +50,7 @@ char* Socket::getRequest()
     ServletResponse res;
 
     if(req.getMethod() == "POST"){
-        printf("doPost called\n");
+//        printf("doPost called\n");
         http_servlet.doPost(sock, req, res);
     }
     else if(req.getMethod() == "GET") http_servlet.doGet(sock, req, res);

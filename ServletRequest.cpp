@@ -6,20 +6,21 @@ ServletRequest::ServletRequest(char *req, int request_length) : mRequest(req), m
 }
 
 void ServletRequest::parseRequest() {
-//    for(int i = 0; i < mRequestLength; i++){
-//        cout << mBody[i];
-//    }
     cout << endl;
     mRequestByLine = separateLine(mRequest);
     string method = mRequestByLine.at(0);
     mMethod = MyUtil::myTrim(method.substr(0, method.find('/')));
-    cout << "mMethod:" << mMethod << endl;
+    string host = mRequestByLine.at(1);
+    int findHost = host.find(":");
+    mHost = host.substr(findHost + 2, host.length() - findHost - 2);
+//    cout << "host:" << mHost << endl;
+//    cout << "mMethod:" << mMethod << endl;
 
     if(mMethod == "POST"){
         const string BOUNDARY = "------WebKitFormBoundary";
         string strRequest = mRequest;
         int pos = strRequest.find(BOUNDARY);
-        cout << "boundary beg part: " << pos << endl;
+//        cout << "boundary beg part: " << pos << endl;
         mHeader = new char[pos];
         for(int i = 0; i < pos; i++){
             mHeader[i] = mRequest[i];
@@ -36,27 +37,6 @@ void ServletRequest::parseRequest() {
         parseFilePart();
     }
 }
-
-//parse info from header
-//void ServletRequest::parseHeader() {
-//    mHeaderByLine = separateLine(mHeader);
-//    const int CONTENT_POS = 3;
-//        for(int i = 0; i < mHeaderByLine.size(); ++i){
-//        cout << mHeaderByLine.at(i);
-//    }
-//    cout << endl;
-//
-//
-//    string method = mHeaderByLine.at(0);
-//    mMethod = MyUtil::myTrim(method.substr(0, method.find('/')));
-//
-//    if(mMethod == "POST"){
-//        string content = mHeaderByLine.at(CONTENT_POS);
-//        cout << content << endl;
-//        string length = MyUtil::myTrim(content.substr(content.find(':') + 1, content.length()));
-//        mContentLength = stoi(length);
-//    }
-//}
 
 //split original char array by '\n'
 vector<char*> ServletRequest::separateLine(char* res) {
@@ -83,10 +63,6 @@ vector<char*> ServletRequest::separateLine(char* res) {
 //parse file part
 void ServletRequest::parseFilePart() {
     mBodyByLine = separateLine(mBody);
-//    for(int i = 0; i < mBodyByLine.size(); ++i){
-//        cout << mBodyByLine.at(i);
-//    }
-//    cout << endl;
 
     //extract file name
     parseFileName();

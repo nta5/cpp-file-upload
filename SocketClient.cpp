@@ -163,12 +163,11 @@ int main()
 }
 
 void parseResponse(char* res){
-    const string JASON_DELIMITER = "<JSON>";
+    const string JSON_DELIMITER = "<JSON>";
     string response = res;
-//    cout << response << endl;
     vector<string> lines;
 
-    int pos = response.find(JASON_DELIMITER);
-    string json = response.substr(pos + JASON_DELIMITER.length(), response.length() - pos);
+    int pos = response.find(JSON_DELIMITER);
+    string json = response.substr(pos + JSON_DELIMITER.length(), response.length() - pos);
     cout << json << endl;
 }

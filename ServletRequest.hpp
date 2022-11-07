@@ -30,7 +30,8 @@ class ServletRequest{
     string mMethod;
     int mRequestLength;
     int mContentLength;
-    string mHost;
+    // web: 0, console: 1;
+    int mHost;
 
     //info from body
     string mFileName;
@@ -51,7 +52,7 @@ public:
     const string currentDateTime();
     string getMethod() { return mMethod; }
     int getContentLength() { return mContentLength; }
-    string getHost() { return mHost; }
+    int getHost() { return mHost; }
     void setBody(char* body) { mBody = body; }
     string getFileName() { return mFileName; }
     string getCaption() { return mCaption; }

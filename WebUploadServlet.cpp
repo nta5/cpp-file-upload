@@ -42,8 +42,7 @@ void WebUploadServlet::doPost(int sock, ServletRequest request, ServletResponse 
     }
 
     resString += "</body>\n</html>\r\n";
-    cout << "host:" << request.getHost() << endl;
-    if(request.getHost() == "console"){
+    if(request.getHost() == 1){
         resString += "<JSON>\n{\n";
 
         for (const auto & file : recursive_directory_iterator(path)) {
@@ -72,7 +71,7 @@ void WebUploadServlet::doPost(int sock, ServletRequest request, ServletResponse 
     if ((rval = write(sock, res, strlen(res))) < 0){
         perror("writing socket");
     }else  {
-        printf("%s\n",res);
+//        printf("%s\n",res);
     }
 
     close (sock);

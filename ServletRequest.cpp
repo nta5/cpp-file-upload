@@ -12,9 +12,7 @@ void ServletRequest::parseRequest() {
     mMethod = MyUtil::myTrim(method.substr(0, method.find('/')));
     string host = mRequestByLine.at(1);
     int findHost = host.find(":");
-    mHost = host.substr(findHost + 2, host.length() - findHost - 2);
-//    cout << "host:" << mHost << endl;
-//    cout << "mMethod:" << mMethod << endl;
+    mHost = host.substr(findHost + 2, host.length() - findHost - 2).at(0) == 'c' ? 1 : 0 ;
 
     if(mMethod == "POST"){
         const string BOUNDARY = "------WebKitFormBoundary";

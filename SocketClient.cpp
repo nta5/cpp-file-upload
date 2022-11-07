@@ -34,7 +34,7 @@ int main()
     }
     bzero((char *)&addr, sizeof(addr));
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr("172.20.10.5");
+    addr.sin_addr.s_addr = inet_addr("10.65.68.188");
     /*addr.sin_addr.s_addr = htonl(INADDR_ANY);*/
     addr.sin_port = htons(8888);
     addrlen = sizeof(addr);
@@ -45,8 +45,36 @@ int main()
         printf("\nConnection Failed \n");
         return -1;
     }
+    cout << "Would you like to uplaod a image??(y/n)"<<endl;
+    char checking[1024];
+    cin >> checking;
+//    if(strcmp(checking,'y') == 0){
+//        loop = true;
+//    } else{
+//        loop = false;
+//    }
+//    while(loop){
+//        cout << "Enter the path" << endl;
+//        char path[1024];
+//        cin >> path;
+//    }
+    cout << "Enter the path" << endl;
+//    char pathInput[1024];
+    string pathInput;
+    cin >> pathInput;
 
-    ifstream ifd("/Users/kelly/Desktop/BCIT/FALL2022(T3)/COMP3940/Assignment/3/cpp-file-upload/images/2022-09-23_thisdogsocute_dog.png", ios::binary | ios::ate);
+
+    cout << "Enter the caption" << endl;
+//    char captionInput[1024];
+    string captionInput;
+    cin >> captionInput;
+
+    cout << "Enter the date" << endl;
+//    char dateInput[1024];
+    string dateInput;
+    cin >> dateInput;
+
+    ifstream ifd(pathInput, ios::binary | ios::ate);
     int size = ifd.tellg();
     ifd.seekg(0, ios::beg);
     vector<char> buffer;
@@ -75,7 +103,7 @@ int main()
 
     //<--------------------- FILE PART ----------------------------->
     string filePart = "\r\n------WebKitFormBoundaryC0eh71BbS7kAj3Wn\r\n";
-    filePart += "Content-Disposition: form-data; name=\"fileName\"; filename=\"file.png\"\r\n";
+    filePart += "Content-Disposition: form-data; name=\"fileName\"; filename=\"" +captionInput+"\r\n";
     filePart += "Content-Type: image/png\r\n\r\n";
     int filePartSize = filePart.size();
     cout << "filePart size:" << filePartSize << endl;
@@ -85,10 +113,10 @@ int main()
     //<--------------------- FILE INFO ----------------------------->
     string fileInfo = "\r\n------WebKitFormBoundaryC0eh71BbS7kAj3Wn\r\n";
     fileInfo += "Content-Disposition: form-data; name=\"caption\"\r\n\r\n";
-    fileInfo += "THISFILEISFROMCONSOLE\r\n";
+    fileInfo += captionInput + "\r\n";
     fileInfo += "------WebKitFormBoundaryC0eh71BbS7kAj3Wn\r\n";
     fileInfo += "Content-Disposition: form-data; name=\"date\"\r\n\r\n";
-    fileInfo += "2022-12-25\r\n";
+    fileInfo +=  dateInput + "\r\n";
     fileInfo += "------WebKitFormBoundaryC0eh71BbS7kAj3Wn--\r\n\r\n";
     int fileInfoSize = fileInfo.size();
     cout << "fileInfo size:" << fileInfoSize << endl;

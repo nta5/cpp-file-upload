@@ -31,22 +31,22 @@ g++-12 -o client SocketClient.cpp
 
 ### Contribution
 - Chengyang Li
-    - TO FILL IN
-    - TO FILL IN
-    - TO FILL IN
+    - Create and connect Console app to server
+    - Develop user input for Console App
+    - Test and debug
 - Sehyun Park
-    - Parse HTTP Request for Web and Console
+    - Parse HTTP Request for Web and Console app
     - Create Socket to read request from the socket
-    - Create JSON Data for Console 
+    - Create JSON response for Console app
 - Alex Pu:
-    - Construct and write request to socket for Console
-    - TO FILL IN
-    - Video
+    - Create request and response for Web and Console app
+    - Write image to local directory
+    - Demo video
 - Melanie Ta
-    - Implement Multi Thread
-    - TO FILL IN
-    - TO FILL IN
+    - Implement Multithreading
+    - Establish and test connections to Assignment2 Java Server/Client 
+    - Planning and organizing tasks 
 - Shen Yen
     - Develop user input for Console App
     - Test and debug
-    - Video
+    - Demo video

@@ -41,7 +41,29 @@ void WebUploadServlet::doPost(int sock, ServletRequest request, ServletResponse 
         resString += "<h4>" + str + "</h4>\n";
     }
 
-    resString += "</body>\n</html>\r\n\r\n";
+    resString += "</body>\n</html>\r\n";
+    if(request.getHost() == 1){
+        resString += "<JSON>\n{\n";
+
+        for (const auto & file : recursive_directory_iterator(path)) {
+            string str(file.path().filename());
+            if(str.at(0) != '.'){
+                int findDate = str.find("_");
+                string date = str.substr(0, findDate);
+
+                string tmp = str.substr(findDate + 1, str.length() - findDate - 1);
+                int findCaption = tmp.find("_");
+                string caption = tmp.substr(0, findCaption);
+
+                string fileName = tmp.substr(findCaption + 1, tmp.length() - findCaption - 1);
+
+                resString += "{fileName: " + fileName + ", caption: " + caption + ", date: " + date + "}\n";
+            }
+        }
+        resString += "}\r\n\r\n";
+    }else{
+        resString += "\r\n";
+    }
 
     char res[resString.length() + 1];
     strcpy(res, resString.c_str());
@@ -49,7 +71,7 @@ void WebUploadServlet::doPost(int sock, ServletRequest request, ServletResponse 
     if ((rval = write(sock, res, strlen(res))) < 0){
         perror("writing socket");
     }else  {
-        printf("%s\n",res);
+//        printf("%s\n",res);
     }
 
     close (sock);

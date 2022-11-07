@@ -21,4 +21,5 @@ public:
     ~Socket();
 private:
     int sock;
+    int countBoundary(string boundary, char* req, ssize_t size);
 };

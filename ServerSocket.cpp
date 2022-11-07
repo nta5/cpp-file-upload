@@ -20,7 +20,6 @@ ServerSocket::ServerSocket(int port)
   struct sockaddr_in server;
   server.sin_family = AF_INET;
   server.sin_addr.s_addr = htonl(INADDR_ANY);
-//    server.sin_addr.s_addr = inet_addr("IP address here");
   server.sin_port = htons(8888);
 
   int option;

@@ -1,33 +1,47 @@
 #include "ServletRequest.hpp"
 
-ServletRequest::ServletRequest(char *header) : mHeader(header), mContentLength(-1), BEFORE_FILE(4){
-    parseHeader();
+ServletRequest::ServletRequest(char *req, int request_length) : mRequest(req), mRequestLength(request_length),
+                                                                mContentLength(-1), BEFORE_FILE(4){
+    parseRequest();
 }
 
-//parse info from header
-void ServletRequest::parseHeader() {
-    mHeaderByLine = separateLine(mHeader);
-    const int CONTENT_POS = 3;
-
-    string method = mHeaderByLine.at(0);
+void ServletRequest::parseRequest() {
+    cout << endl;
+    mRequestByLine = separateLine(mRequest);
+    string method = mRequestByLine.at(0);
     mMethod = MyUtil::myTrim(method.substr(0, method.find('/')));
+    string host = mRequestByLine.at(1);
+    int findHost = host.find(":");
+    mHost = host.substr(findHost + 2, host.length() - findHost - 2).at(0) == 'c' ? 1 : 0 ;
 
     if(mMethod == "POST"){
-        string content = mHeaderByLine.at(CONTENT_POS);
-        string length = MyUtil::myTrim(content.substr(content.find(':') + 1, content.length()));
-//        cout << "POST: " << length << endl;
-//        mContentLength = 45200;
-        mContentLength = stoi(length);
+        const string BOUNDARY = "------WebKitFormBoundary";
+        string strRequest = mRequest;
+        int pos = strRequest.find(BOUNDARY);
+//        cout << "boundary beg part: " << pos << endl;
+        mHeader = new char[pos];
+        for(int i = 0; i < pos; i++){
+            mHeader[i] = mRequest[i];
+        }
+
+        mBody = new char[mRequestLength - pos];
+        int index = 0;
+        for(int i = pos; i < mRequestLength; i++){
+            mBody[index] = mRequest[i];
+            index++;
+        }
+
+        mContentLength = index;
+        parseFilePart();
     }
 }
 
 //split original char array by '\n'
 vector<char*> ServletRequest::separateLine(char* res) {
     vector<char*> result;
-    int range = mContentLength == -1 ? strlen(res) : mContentLength;
 
     char* tmp = res;
-    vector<int> linePos = getLinePos(range, tmp);
+    vector<int> linePos = getLinePos(mRequestLength, tmp);
 
     for(int i = 0; i < linePos.size() - 1; ++i){
         int beg = linePos[i];
@@ -140,28 +154,8 @@ void ServletRequest::createFileBytes(int end) {
 }
 
 bool ServletRequest::findString(char* str, string cmp){
-    char temp[cmp.length() + 1];
-    strcpy(temp, cmp.c_str());
-    int i=0;
-    int j=0;
-
-
-    while(str[i]!='\0'){
-        if(str[i] == temp[j])
-        {
-            while (str[i] == temp[j] && str[j]!='\0')
-            {
-                j++;
-                i++;
-            }
-            if(temp[j]=='\0'){
-                return true;
-            }
-            j=0;
-        }
-        i++;
-    }
-    return false;
+    string a(str);
+    return a.find(cmp) != string::npos;
 }
 
 vector<int> ServletRequest::getLinePos(int range, char* res) {

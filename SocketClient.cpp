@@ -18,6 +18,8 @@ void parseResponse(char* res);
 
 int main()
 {
+//    const char MY_IP[] = "Put your ip address here!";
+    const char MY_IP[] = "192.168.10.247";
     struct sockaddr_in addr;
     int addrlen, sock, status, client_fd;
     struct ip_mreq mreq;
@@ -35,7 +37,7 @@ int main()
 
     //test on your own: IP address should be your wifi ip address
     //test with others: server's IP address
-    addr.sin_addr.s_addr = inet_addr("192.168.10.247");
+    addr.sin_addr.s_addr = inet_addr(MY_IP);
     /*addr.sin_addr.s_addr = htonl(INADDR_ANY);*/
     addr.sin_port = htons(8888);
     addrlen = sizeof(addr);
